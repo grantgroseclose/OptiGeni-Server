@@ -1,8 +1,13 @@
-const schedule = (tasks) => {
+import { Task } from '../types/task';
+
+
+
+
+const schedule = (tasks: Task[]) => {
     tasks.sort((a, b) => (b.priority / b.deadline) - (a.priority / a.deadline));
 
-    const schedule = [];
-    const infeasibleTasks = [];
+    const schedule: Task[] = [];
+    const infeasibleTasks: Task[] = [];
     let currentTime = 0;
 
     tasks.forEach(task => {
@@ -16,7 +21,7 @@ const schedule = (tasks) => {
     });
 
     // Binary search to find insertion point
-    const binarySearch = (startTime) => {
+    const binarySearch = (startTime: number) => {
         let low = 0;
         let high = schedule.length - 1;
         while (low <= high) {
@@ -45,4 +50,4 @@ const schedule = (tasks) => {
 
 
 
-module.exports = schedule;
+export default schedule;

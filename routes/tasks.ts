@@ -1,16 +1,18 @@
-const express = require("express");
-const router = express.Router();
-const Joi = require("joi");
-const multer = require('multer');
+import { Router, Response, Request } from 'express';
+const router = Router();
+import Joi from 'joi';
+import multer from 'multer';
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: 52428800 }
 });
-const moment = require("moment");
-const validateWith = require("../middleware/validation");
+import moment from 'moment';
+import validateWith from '../middleware/validation';
 
-const TaskModel = require('../models/Tasks');
-const schedule = require('../middleware/schedule');
+import { Task } from '../types/task';
+import TaskModel from '../models/Tasks';
+import { TaskTitleDto, TaskDeadlineDto, TaskPriorityDto, TaskExTimeDto } from '../dtos/create-task';
+import schedule from '../middleware/schedule';
 
 const validationSchema = Joi.object({
     title: Joi.string().min(1).required(),
@@ -24,7 +26,7 @@ const validationSchema = Joi.object({
 
 router.get("/", async (req, res) => {
     try {
-        let tasks = await TaskModel.find({});
+        let tasks: Task[] = await TaskModel.find({});
         tasks = schedule(tasks);
         res.send(tasks);
     } catch (error) {
@@ -32,12 +34,17 @@ router.get("/", async (req, res) => {
     }
 });
 
-router.post("/", [upload.none(), validateWith(validationSchema)], async (req, res) => {
+router.post("/", [upload.none(), validateWith(validationSchema)], async (req: Request, res: Response) => {
+    const { title } = req.body as TaskTitleDto;
+    const { deadline } = req.body as TaskDeadlineDto;
+    const { priority } = req.body as TaskPriorityDto;
+    const { executionTime } = req.body as TaskExTimeDto;
+
     const newTask = new TaskModel({
-        title: req.body.title,
-        deadline: req.body.deadline,
-        priority: req.body.priority,
-        executionTime: req.body.executionTime
+        title,
+        deadline,
+        priority,
+        executionTime
     });
     const task = await TaskModel.create(newTask);
     res.status(201).send(task);
@@ -58,5 +65,5 @@ router.delete("/delete", async (req, res) => {
 
 
 
-module.exports = router;
+export default router;
 
