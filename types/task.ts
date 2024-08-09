@@ -1,13 +1,14 @@
 import { Document } from 'mongoose';
+import { Category } from './category';
 
 export interface Task extends Document {
     userId: string
     title: string
-    category: string
+    categoryId: string
     description: string
     deadline: number
     priority: number
     executionTime: number
     startTime: number
-    status: string
+    status: "Not started" | "In-progress" | "Complete"
 }

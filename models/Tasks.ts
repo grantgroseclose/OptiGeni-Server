@@ -4,15 +4,15 @@ import { Task } from "../types/task";
 
 const TaskSchema: Schema = new Schema({
     userId: {
-        type: String,
+        type: Schema.ObjectId,
         required: false
     },
     title: {
         type: String,
         required: true
     },
-    category: {
-        type: String,
+    categoryId: {
+        type: Schema.ObjectId,
         required: false
     },
     description: {
