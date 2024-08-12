@@ -33,12 +33,12 @@ router.post("/", validateWith(validationSchema), async (req: Request, res: Respo
     } else {
         const hashed_pass = await bcrypt.hash(password, 10);
         const newUser = new UserModel({
-            username,
-            hashed_pass,
-            firstname
+            username: username,
+            password: hashed_pass,
+            firstname: firstname
         });
         const user = await UserModel.create(newUser);
-        res.status(201).send(user);
+        res.status(201).send(user.toObject());
     }
 });
 

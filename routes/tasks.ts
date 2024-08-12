@@ -24,7 +24,7 @@ const validationSchema = Joi.object({
 
 
 
-router.get("/", async (req, res) => {
+router.get("/", async (req: Request, res: Response) => {
     try {
         let tasks: Task[] = await TaskModel.find({});
         tasks = schedule(tasks);
