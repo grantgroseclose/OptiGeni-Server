@@ -26,10 +26,14 @@ const validationSchema = Joi.object({
 
 
 
-router.get("/", async (req: Request, res: Response) => {
+router.get("/", auth, async (req: Request, res: Response) => {
+    const { userId } = req.user as TaskUserIdDto;
+
     try {
         let tasks: Task[] = await TaskModel.find({});
-        tasks = schedule(tasks);
+        const filteredTasks = tasks.filter(task => task.userId.equals(userId));
+        
+        tasks = schedule(filteredTasks);
         res.send(tasks);
     } catch (error) {
         res.status(500).json({ error: "An unexpected error has occured fetching tasks."});
