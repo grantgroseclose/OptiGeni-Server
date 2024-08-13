@@ -4,7 +4,7 @@ import { Task } from "../types/task";
 
 const TaskSchema: Schema = new Schema({
     userId: {
-        type: Schema.ObjectId,
+        type: Schema.Types.ObjectId,
         required: true
     },
     title: {
@@ -12,7 +12,7 @@ const TaskSchema: Schema = new Schema({
         required: true
     },
     categoryId: {
-        type: Schema.ObjectId,
+        type: Schema.Types.ObjectId,
         required: false
     },
     description: {

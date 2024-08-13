@@ -1,5 +1,6 @@
 import { Router, Response, Request } from 'express';
 const router = Router();
+import { Types } from 'mongoose';
 import Joi from 'joi';
 import multer from 'multer';
 const upload = multer({
@@ -48,7 +49,7 @@ router.post("/", [auth, upload.none(), validateWith(validationSchema)], async (r
     const { executionTime } = req.body as TaskExTimeDto;
 
     const newTask = new TaskModel({
-        userId: userId,
+        userId: Types.ObjectId.createFromHexString(userId),
         title: title,
         deadline: deadline,
         priority: priority,
