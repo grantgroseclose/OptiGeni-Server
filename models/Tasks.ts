@@ -13,7 +13,7 @@ const TaskSchema: Schema = new Schema({
     },
     categoryId: {
         type: Schema.Types.ObjectId,
-        required: false
+        required: true
     },
     description: {
         type: String,

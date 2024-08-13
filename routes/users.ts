@@ -8,7 +8,7 @@ import validateWith from '../middleware/validation';
 
 import { User } from '../types/user';
 import UserModel from '../models/Users';
-import { UserUsernameDto, UserPasswordDto , UserFirstnameDto } from '../dtos/register-user';
+import { UserUsernameDto, UserPasswordDto , UserFirstnameDto } from '../dtos/user';
 
 
 

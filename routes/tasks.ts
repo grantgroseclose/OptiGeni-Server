@@ -1,6 +1,6 @@
 import { Router, Response, Request } from 'express';
 const router = Router();
-import { Types } from 'mongoose';
+import { Document, HydratedDocument, HydratedDocumentFromSchema, Types } from 'mongoose';
 import Joi from 'joi';
 import multer from 'multer';
 const upload = multer({
@@ -13,15 +13,18 @@ import auth from '../middleware/auth';
 
 import { Task } from '../types/task';
 import TaskModel from '../models/Tasks';
-import { TaskTitleDto, TaskDeadlineDto, TaskPriorityDto, TaskExTimeDto, TaskUserIdDto } from '../dtos/create-task';
+import CategoryModel from '../models/Categories';
+import { TaskTitleDto, TaskDeadlineDto, TaskPriorityDto, TaskExTimeDto, TaskUserIdDto, TaskCategoryDto } from '../dtos/task';
 import schedule from '../middleware/schedule';
+import { Category } from '../types/category';
 
 
 const validationSchema = Joi.object({
     title: Joi.string().min(1).required(),
     deadline: Joi.number().min(1).required(),
     priority: Joi.number().min(1).required(),
-    executionTime: Joi.number().min(1).required()
+    executionTime: Joi.number().min(1).required(),
+    category: Joi.string().required()
 });
 
 
@@ -47,14 +50,23 @@ router.post("/", [auth, upload.none(), validateWith(validationSchema)], async (r
     const { deadline } = req.body as TaskDeadlineDto;
     const { priority } = req.body as TaskPriorityDto;
     const { executionTime } = req.body as TaskExTimeDto;
+    const { category } = req.body as TaskCategoryDto;
+
+    const cat: HydratedDocument<Category> = await CategoryModel.findOne({ title: category }) as HydratedDocument<Category>;
+
+    if (!cat) {
+        return res.status(404).send({ error: "Category not found" });
+    }
 
     const newTask = new TaskModel({
         userId: Types.ObjectId.createFromHexString(userId),
+        categoryId: cat._id as Types.ObjectId,
         title: title,
         deadline: deadline,
         priority: priority,
         executionTime: executionTime
     });
+
     const task = await TaskModel.create(newTask);
     res.status(201).send(task);
 });

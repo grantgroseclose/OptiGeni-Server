@@ -4,7 +4,7 @@ import { Category } from "../types/category";
 
 const CategorySchema: Schema = new Schema({
     userId: {
-        type: Schema.ObjectId,
+        type: Schema.Types.ObjectId,
         required: true
     },
     title: {

@@ -1,7 +1,7 @@
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
 
 export interface Category extends Document {
-    userId: string;
+    userId: Types.ObjectId;
     title: string;
     color: string;
 }
