@@ -9,6 +9,6 @@ export interface Task extends Document {
     deadline: number
     priority: number
     executionTime: number
-    startTime: number
+    startDate: number
     status: "Not started" | "In-progress" | "Complete"
 }

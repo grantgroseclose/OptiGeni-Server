@@ -14,4 +14,8 @@ interface TaskExTimeDto {
     executionTime: number
 }
 
-export { TaskTitleDto, TaskDeadlineDto, TaskPriorityDto, TaskExTimeDto };
+interface TaskUserIdDto {
+    userId: string
+}
+
+export { TaskTitleDto, TaskDeadlineDto, TaskPriorityDto, TaskExTimeDto, TaskUserIdDto };

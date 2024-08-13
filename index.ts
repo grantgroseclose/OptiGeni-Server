@@ -5,6 +5,15 @@ import connectDB from './connectDB';
 import tasks from './routes/tasks';
 import users from './routes/users';
 import user from './routes/user';
+import { JwtPayload } from 'jsonwebtoken';
+
+declare global {
+    namespace Express {
+        interface Request {
+            user?: string | JwtPayload;
+        }
+    }
+}
 
 dotenv.config({ path: require('find-config')('.env') });
 

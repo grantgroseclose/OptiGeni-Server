@@ -8,11 +8,13 @@ const upload = multer({
 });
 import moment from 'moment';
 import validateWith from '../middleware/validation';
+import auth from '../middleware/auth';
 
 import { Task } from '../types/task';
 import TaskModel from '../models/Tasks';
-import { TaskTitleDto, TaskDeadlineDto, TaskPriorityDto, TaskExTimeDto } from '../dtos/create-task';
+import { TaskTitleDto, TaskDeadlineDto, TaskPriorityDto, TaskExTimeDto, TaskUserIdDto } from '../dtos/create-task';
 import schedule from '../middleware/schedule';
+
 
 const validationSchema = Joi.object({
     title: Joi.string().min(1).required(),
@@ -34,17 +36,19 @@ router.get("/", async (req: Request, res: Response) => {
     }
 });
 
-router.post("/", [upload.none(), validateWith(validationSchema)], async (req: Request, res: Response) => {
+router.post("/", [auth, upload.none(), validateWith(validationSchema)], async (req: Request, res: Response) => {
+    const { userId } = req.user as TaskUserIdDto;
     const { title } = req.body as TaskTitleDto;
     const { deadline } = req.body as TaskDeadlineDto;
     const { priority } = req.body as TaskPriorityDto;
     const { executionTime } = req.body as TaskExTimeDto;
 
     const newTask = new TaskModel({
-        title,
-        deadline,
-        priority,
-        executionTime
+        userId: userId,
+        title: title,
+        deadline: deadline,
+        priority: priority,
+        executionTime: executionTime
     });
     const task = await TaskModel.create(newTask);
     res.status(201).send(task);

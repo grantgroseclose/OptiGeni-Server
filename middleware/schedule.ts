@@ -12,7 +12,7 @@ const schedule = (tasks: Task[]) => {
 
     tasks.forEach(task => {
         if (currentTime + task.executionTime <= task.deadline) {
-            task.startTime = currentTime;
+            task.startDate = currentTime;
             schedule.push(task);
             currentTime += task.executionTime;
         } else {
@@ -26,9 +26,9 @@ const schedule = (tasks: Task[]) => {
         let high = schedule.length - 1;
         while (low <= high) {
             const mid = Math.floor((low + high) / 2);
-            if (schedule[mid].startTime < startTime) {
+            if (schedule[mid].startDate < startTime) {
                 low = mid + 1;
-            } else if (schedule[mid].startTime > startTime) {
+            } else if (schedule[mid].startDate > startTime) {
                 high = mid - 1;
             } else {
                 return mid; // Found exact match
@@ -40,7 +40,7 @@ const schedule = (tasks: Task[]) => {
     infeasibleTasks.forEach(task => {
         let minimumFeasibleTime = task.deadline - task.executionTime;
         let insertionIndex = binarySearch(minimumFeasibleTime);
-        task.startTime = minimumFeasibleTime;
+        task.startDate = minimumFeasibleTime;
         schedule.splice(insertionIndex, 0, task);
     });
 
