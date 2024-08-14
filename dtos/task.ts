@@ -1,25 +1,29 @@
-interface TaskTitleDto {
-    title: string
-}
-
-interface TaskDeadlineDto {
-    deadline: number
-}
-
-interface TaskPriorityDto {
-    priority: number
-}
-
-interface TaskExTimeDto {
-    executionTime: number
-}
-
 interface TaskUserIdDto {
-    userId: string
-}
+    userId: string;
+};
 
 interface TaskCategoryDto {
-    category: string
-}
+    category: string;
+};
 
-export { TaskTitleDto, TaskDeadlineDto, TaskPriorityDto, TaskExTimeDto, TaskUserIdDto, TaskCategoryDto };
+interface TaskTitleDto {
+    title: string;
+};
+
+interface TaskDescriptionDto {
+    description: string;
+};
+
+interface TaskDeadlineDto {
+    deadline: number;
+};
+
+interface TaskPriorityDto {
+    priority: number;
+};
+
+interface TaskExTimeDto {
+    executionTime: number;
+};
+
+export { TaskTitleDto, TaskDeadlineDto, TaskPriorityDto, TaskExTimeDto, TaskUserIdDto, TaskCategoryDto, TaskDescriptionDto };

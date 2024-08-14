@@ -7,17 +7,17 @@ const TaskSchema: Schema = new Schema({
         type: Schema.Types.ObjectId,
         required: true
     },
-    title: {
-        type: String,
-        required: true
-    },
     categoryId: {
         type: Schema.Types.ObjectId,
         required: true
     },
+    title: {
+        type: String,
+        required: true
+    },
     description: {
         type: String,
-        required: false
+        required: true
     },
     deadline: {
         type: Number,
@@ -31,12 +31,13 @@ const TaskSchema: Schema = new Schema({
         type: Number,
         required: true
     },
-    startDate: {
-        type: Number,
-        required: false
-    },
     status: {
         type: String,
+        enum: ['Not started', 'In-progress', 'Complete'],
+        required: true
+    },
+    startDate: {
+        type: Number,
         required: false
     }
 });
