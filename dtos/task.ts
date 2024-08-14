@@ -2,8 +2,8 @@ interface TaskUserIdDto {
     userId: string;
 };
 
-interface TaskCategoryDto {
-    category: string;
+interface TaskCategoryTitleDto {
+    categoryTitle: string;
 };
 
 interface TaskTitleDto {
@@ -26,4 +26,4 @@ interface TaskExTimeDto {
     executionTime: number;
 };
 
-export { TaskTitleDto, TaskDeadlineDto, TaskPriorityDto, TaskExTimeDto, TaskUserIdDto, TaskCategoryDto, TaskDescriptionDto };
+export { TaskTitleDto, TaskDeadlineDto, TaskPriorityDto, TaskExTimeDto, TaskUserIdDto, TaskCategoryTitleDto, TaskDescriptionDto };

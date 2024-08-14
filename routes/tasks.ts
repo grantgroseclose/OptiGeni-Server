@@ -14,7 +14,7 @@ import auth from '../middleware/auth';
 import { Task } from '../types/task';
 import TaskModel from '../models/Tasks';
 import CategoryModel from '../models/Categories';
-import { TaskTitleDto, TaskDeadlineDto, TaskPriorityDto, TaskExTimeDto, TaskUserIdDto, TaskCategoryDto, TaskDescriptionDto } from '../dtos/task';
+import { TaskTitleDto, TaskDeadlineDto, TaskPriorityDto, TaskExTimeDto, TaskUserIdDto, TaskCategoryTitleDto, TaskDescriptionDto } from '../dtos/task';
 import schedule from '../middleware/schedule';
 import { Category } from '../types/category';
 
@@ -24,7 +24,7 @@ const validationSchema = Joi.object({
     deadline: Joi.number().min(1).required(),
     priority: Joi.number().min(1).required(),
     executionTime: Joi.number().min(1).required(),
-    category: Joi.string().required(),
+    categoryTitle: Joi.string().required(),
     description: Joi.string().required()
 });
 
@@ -51,10 +51,10 @@ router.post("/", [auth, upload.none(), validateWith(validationSchema)], async (r
     const { deadline } = req.body as TaskDeadlineDto;
     const { priority } = req.body as TaskPriorityDto;
     const { executionTime } = req.body as TaskExTimeDto;
-    const { category } = req.body as TaskCategoryDto;
+    const { categoryTitle } = req.body as TaskCategoryTitleDto;
     const { description } = req.body as TaskDescriptionDto;
 
-    const cat: HydratedDocument<Category> = await CategoryModel.findOne({ title: category }) as HydratedDocument<Category>;
+    const cat: HydratedDocument<Category> = await CategoryModel.findOne({ title: categoryTitle }) as HydratedDocument<Category>;
 
     if (!cat) {
         return res.status(404).send({ error: "Category not found" });
@@ -63,6 +63,7 @@ router.post("/", [auth, upload.none(), validateWith(validationSchema)], async (r
     const newTask = new TaskModel({
         userId: Types.ObjectId.createFromHexString(userId),
         categoryId: cat._id as Types.ObjectId,
+        categoryTitle: cat.title,
         title: title,
         description: description,
         deadline: deadline,

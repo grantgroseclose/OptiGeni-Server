@@ -11,6 +11,10 @@ const TaskSchema: Schema = new Schema({
         type: Schema.Types.ObjectId,
         required: true
     },
+    categoryTitle: {
+        type: String,
+        required: true
+    },
     title: {
         type: String,
         required: true
