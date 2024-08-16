@@ -14,8 +14,16 @@ import auth from '../middleware/auth';
 import { Category } from '../types/category';
 import CategoryModel from '../models/Categories';
 import { TaskUserIdDto } from '../dtos/task';
+import { CategoryColorDto, CategoryTitleDto, CategoryUserIdDto } from '../dtos/category';
 
 
+
+
+const validationSchema = Joi.object({
+    userId: Joi.string(),
+    title: Joi.string().required(),
+    color: Joi.string().required()
+});
 
 
 router.get("/", auth, async (req: Request, res: Response) => {
@@ -29,6 +37,21 @@ router.get("/", auth, async (req: Request, res: Response) => {
     } catch (error) {
         res.status(500).json({ error: "An unexpected error has occured fetching categories."});
     }
+});
+
+router.post("/", [auth, upload.none(), validateWith(validationSchema)], async (req: Request, res: Response) => {
+    const { userId } = req.user as CategoryUserIdDto;
+    const { title } = req.body as CategoryTitleDto;
+    const { color } = req.body as CategoryColorDto;
+
+    const newCategory = new CategoryModel({
+        userId: Types.ObjectId.createFromHexString(userId),
+        title: title,
+        color: color
+    });
+
+    const category = await CategoryModel.create(newCategory);
+    res.status(201).send(category);
 });
 
 
