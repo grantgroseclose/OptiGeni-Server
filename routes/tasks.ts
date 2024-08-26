@@ -14,7 +14,7 @@ import auth from '../middleware/auth';
 import { Task } from '../types/task';
 import TaskModel from '../models/Tasks';
 import CategoryModel from '../models/Categories';
-import { TaskTitleDto, TaskDeadlineDto, TaskPriorityDto, TaskExTimeDto, TaskUserIdDto, TaskCategoryTitleDto, TaskDescriptionDto } from '../dtos/task';
+import { TaskTitleDto, TaskDeadlineDto, TaskPriorityDto, TaskExTimeDto, TaskUserIdDto, TaskCategoryTitleDto, TaskDescriptionDto, TaskUIdDto } from '../dtos/task';
 import schedule from '../middleware/schedule';
 import { Category } from '../types/category';
 
@@ -22,6 +22,7 @@ import { Category } from '../types/category';
 
 
 const taskSchema = z.object({
+    uId: z.string().min(1),
     title: z.string().min(2, 'Title must have at least 2 characters'),
     deadline: z.coerce.number().min(1, 'Deadline must be greater than 0'),
     priority: z.coerce.number().min(1, 'Priority must be greater than 0'),
@@ -51,6 +52,7 @@ router.get("/", auth, async (req: Request, res: Response) => {
 
 router.post("/", [auth, upload.none(), validateWith(taskSchema)], async (req: Request, res: Response) => {
     const { userId } = req.user as TaskUserIdDto;
+    const { uId } = req.body as TaskUIdDto;
     const { title } = req.body as TaskTitleDto;
     const { deadline } = req.body as TaskDeadlineDto;
     const { priority } = req.body as TaskPriorityDto;
@@ -66,6 +68,7 @@ router.post("/", [auth, upload.none(), validateWith(taskSchema)], async (req: Re
 
     const newTask = new TaskModel({
         userId: Types.ObjectId.createFromHexString(userId),
+        uId: uId,
         categoryId: cat._id as Types.ObjectId,
         categoryTitle: cat.title,
         title: title,

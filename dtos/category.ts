@@ -10,4 +10,8 @@ interface CategoryColorDto {
     color: string;
 };
 
-export { CategoryUserIdDto, CategoryTitleDto, CategoryColorDto };
+interface CategoryUIdDto {
+    uId: string;
+};
+
+export { CategoryUserIdDto, CategoryTitleDto, CategoryColorDto, CategoryUIdDto };

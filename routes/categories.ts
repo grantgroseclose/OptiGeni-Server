@@ -14,12 +14,13 @@ import auth from '../middleware/auth';
 import { Category } from '../types/category';
 import CategoryModel from '../models/Categories';
 import { TaskUserIdDto } from '../dtos/task';
-import { CategoryColorDto, CategoryTitleDto, CategoryUserIdDto } from '../dtos/category';
+import { CategoryColorDto, CategoryTitleDto, CategoryUIdDto, CategoryUserIdDto } from '../dtos/category';
 
 
 
 
 const categorySchema = z.object({
+    uId: z.string().min(1),
     userId: z.string().optional(),
     title: z.string(),
     color: z.string()
@@ -41,10 +42,12 @@ router.get("/", auth, async (req: Request, res: Response) => {
 
 router.post("/", [auth, upload.none(), validateWith(categorySchema)], async (req: Request, res: Response) => {
     const { userId } = req.user as CategoryUserIdDto;
+    const { uId } = req.body as CategoryUIdDto;
     const { title } = req.body as CategoryTitleDto;
     const { color } = req.body as CategoryColorDto;
 
     const newCategory = new CategoryModel({
+        uId: uId,
         userId: Types.ObjectId.createFromHexString(userId),
         title: title,
         color: color

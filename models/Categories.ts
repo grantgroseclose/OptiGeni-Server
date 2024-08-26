@@ -3,6 +3,10 @@ import { Category } from "../types/category";
 
 
 const CategorySchema: Schema = new Schema({
+    uId: {
+        type: String,
+        required: true
+    },
     userId: {
         type: Schema.Types.ObjectId,
         required: true
