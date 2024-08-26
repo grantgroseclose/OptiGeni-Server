@@ -1,7 +1,7 @@
 import { Router, Response, Request } from 'express';
 const router = Router();
 import { Types } from 'mongoose';
-import Joi from 'joi';
+import { z } from 'zod';
 import multer from 'multer';
 const upload = multer({
   storage: multer.memoryStorage(),
@@ -19,10 +19,10 @@ import { CategoryColorDto, CategoryTitleDto, CategoryUserIdDto } from '../dtos/c
 
 
 
-const validationSchema = Joi.object({
-    userId: Joi.string(),
-    title: Joi.string().required(),
-    color: Joi.string().required()
+const categorySchema = z.object({
+    userId: z.string().optional(),
+    title: z.string(),
+    color: z.string()
 });
 
 
@@ -39,7 +39,7 @@ router.get("/", auth, async (req: Request, res: Response) => {
     }
 });
 
-router.post("/", [auth, upload.none(), validateWith(validationSchema)], async (req: Request, res: Response) => {
+router.post("/", [auth, upload.none(), validateWith(categorySchema)], async (req: Request, res: Response) => {
     const { userId } = req.user as CategoryUserIdDto;
     const { title } = req.body as CategoryTitleDto;
     const { color } = req.body as CategoryColorDto;

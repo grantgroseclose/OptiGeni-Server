@@ -1,6 +1,7 @@
 import { Document, Types } from 'mongoose';
 
 export interface Task extends Document {
+    // _id: Types.ObjectId;
     userId: Types.ObjectId;
     categoryId: Types.ObjectId;
     categoryTitle: string;

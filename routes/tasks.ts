@@ -1,7 +1,7 @@
 import { Router, Response, Request } from 'express';
 const router = Router();
 import { Document, HydratedDocument, HydratedDocumentFromSchema, Types } from 'mongoose';
-import Joi from 'joi';
+import { z } from 'zod';
 import multer from 'multer';
 const upload = multer({
   storage: multer.memoryStorage(),
@@ -19,13 +19,17 @@ import schedule from '../middleware/schedule';
 import { Category } from '../types/category';
 
 
-const validationSchema = Joi.object({
-    title: Joi.string().min(1).required(),
-    deadline: Joi.number().min(1).required(),
-    priority: Joi.number().min(1).required(),
-    executionTime: Joi.number().min(1).required(),
-    categoryTitle: Joi.string().required(),
-    description: Joi.string().required()
+
+
+const taskSchema = z.object({
+    title: z.string().min(2, 'Title must have at least 2 characters'),
+    deadline: z.coerce.number().min(1, 'Deadline must be greater than 0'),
+    priority: z.coerce.number().min(1, 'Priority must be greater than 0'),
+    executionTime: z.coerce.number().min(1, 'Execution must be greater than 0'),
+    categoryId: z.string().optional(),
+    categoryTitle: z.string(),
+    description: z.string(),
+    status: z.enum(['Not started', 'In-progress', 'Complete']).optional()
 });
 
 
@@ -45,7 +49,7 @@ router.get("/", auth, async (req: Request, res: Response) => {
     }
 });
 
-router.post("/", [auth, upload.none(), validateWith(validationSchema)], async (req: Request, res: Response) => {
+router.post("/", [auth, upload.none(), validateWith(taskSchema)], async (req: Request, res: Response) => {
     const { userId } = req.user as TaskUserIdDto;
     const { title } = req.body as TaskTitleDto;
     const { deadline } = req.body as TaskDeadlineDto;
@@ -73,6 +77,7 @@ router.post("/", [auth, upload.none(), validateWith(validationSchema)], async (r
     });
 
     const task = await TaskModel.create(newTask);
+    // console.log(task);
     res.status(201).send(task);
 });
 

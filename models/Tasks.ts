@@ -3,6 +3,10 @@ import { Task } from "../types/task";
 
 
 const TaskSchema: Schema = new Schema({
+    // _id: {
+    //     type: Schema.Types.ObjectId,
+    //     required: true
+    // },
     userId: {
         type: Schema.Types.ObjectId,
         required: true

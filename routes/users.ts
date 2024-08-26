@@ -1,6 +1,6 @@
 import { Router, Response, Request } from 'express';
 const router = Router();
-import Joi from 'joi';
+import { z } from 'zod';
 import * as bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
@@ -13,15 +13,14 @@ import { UserUsernameDto, UserPasswordDto , UserFirstnameDto } from '../dtos/use
 
 
 
-
-const validationSchema = Joi.object({
-    username: Joi.string().required().min(5).max(18),
-    password: Joi.string().required().min(5).max(18),
-    firstname: Joi.string().required().min(5).max(18)
+const newUserSchema = z.object({
+    username: z.string().min(5, 'Username must have at least 5 characters'),
+    password: z.string().min(5, 'Password must have at least 5 characters'),
+    firstname: z.string().min(1, 'First name must have at least 1 character')
 });
 
 
-router.post("/", validateWith(validationSchema), async (req: Request, res: Response) => {
+router.post("/", validateWith(newUserSchema), async (req: Request, res: Response) => {
     const { username } = req.body as UserUsernameDto;
     const { password } = req.body as UserPasswordDto;
     const { firstname } = req.body as UserFirstnameDto;
