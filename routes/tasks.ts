@@ -80,13 +80,14 @@ router.post("/", [auth, upload.none(), validateWith(taskSchema)], async (req: Re
     });
 
     const task = await TaskModel.create(newTask);
-    // console.log(task);
     res.status(201).send(task);
 });
 
 router.delete("/delete", async (req, res) => {
     try {
-        const task = await TaskModel.findByIdAndDelete(req.query.id);
+        const { uId } = req.query;
+        const task = await TaskModel.findOneAndDelete({ uId: uId });
+
         if (!task) {
             return res.status(404).send();
         }
