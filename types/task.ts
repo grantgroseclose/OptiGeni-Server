@@ -1,4 +1,4 @@
-import { Document, Types } from 'mongoose';
+import { Date, Document, Types } from 'mongoose';
 
 export interface Task extends Document {
     userId: Types.ObjectId;
@@ -7,7 +7,7 @@ export interface Task extends Document {
     categoryTitle: string;
     title: string;
     description: string;
-    deadline: number;
+    deadline: Date;
     priority: number;
     executionTime: number;
     status: string;

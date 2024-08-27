@@ -15,7 +15,7 @@ interface TaskDescriptionDto {
 };
 
 interface TaskDeadlineDto {
-    deadline: number;
+    deadline: Date;
 };
 
 interface TaskPriorityDto {

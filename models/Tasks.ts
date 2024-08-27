@@ -28,7 +28,7 @@ const TaskSchema: Schema = new Schema({
         required: true
     },
     deadline: {
-        type: Number,
+        type: Schema.Types.Date,
         required: true
     },
     priority: {
