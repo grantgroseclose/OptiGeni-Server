@@ -1,3 +1,5 @@
+import { EnumType } from "typescript";
+
 interface TaskUserIdDto {
     userId: string;
 };
@@ -30,4 +32,8 @@ interface TaskUIdDto {
     uId: string;
 };
 
-export { TaskTitleDto, TaskDeadlineDto, TaskPriorityDto, TaskExTimeDto, TaskUserIdDto, TaskCategoryTitleDto, TaskDescriptionDto, TaskUIdDto };
+interface TaskStatusDto {
+    status: 'Not started' | 'In-progress' | 'Complete'
+}
+
+export { TaskTitleDto, TaskDeadlineDto, TaskPriorityDto, TaskExTimeDto, TaskUserIdDto, TaskCategoryTitleDto, TaskDescriptionDto, TaskUIdDto, TaskStatusDto };
