@@ -8,8 +8,5 @@ export interface Task extends Document {
     title: string;
     description: string;
     deadline: Date;
-    priority: number;
-    executionTime: number;
     status: string;
-    startDate: number;
 };

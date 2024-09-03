@@ -14,8 +14,7 @@ import auth from '../middleware/auth';
 import { Task } from '../types/task';
 import TaskModel from '../models/Tasks';
 import CategoryModel from '../models/Categories';
-import { TaskTitleDto, TaskDeadlineDto, TaskPriorityDto, TaskExTimeDto, TaskUserIdDto, TaskCategoryTitleDto, TaskDescriptionDto, TaskUIdDto } from '../dtos/task';
-import schedule from '../middleware/schedule';
+import { TaskTitleDto, TaskDeadlineDto, TaskUserIdDto, TaskCategoryTitleDto, TaskDescriptionDto, TaskUIdDto } from '../dtos/task';
 import { Category } from '../types/category';
 
 
@@ -25,8 +24,6 @@ const taskSchema = z.object({
     uId: z.string().min(1),
     title: z.string().min(2, 'Title must have at least 2 characters'),
     deadline: z.coerce.date(),
-    priority: z.coerce.number().min(1, 'Priority must be greater than 0'),
-    executionTime: z.coerce.number().min(1, 'Execution must be greater than 0'),
     categoryId: z.string().optional(),
     categoryTitle: z.string(),
     description: z.string(),
@@ -42,9 +39,8 @@ router.get("/", auth, async (req: Request, res: Response) => {
     try {
         let tasks: Task[] = await TaskModel.find({});
         const filteredTasks = tasks.filter(task => task.userId.equals(userId));
-        
-        tasks = schedule(filteredTasks);
-        res.send(tasks);
+
+        res.send(filteredTasks);
     } catch (error) {
         res.status(500).json({ error: "An unexpected error has occured fetching tasks."});
     }
@@ -55,8 +51,6 @@ router.post("/", [auth, upload.none(), validateWith(taskSchema)], async (req: Re
     const { uId } = req.body as TaskUIdDto;
     const { title } = req.body as TaskTitleDto;
     const { deadline } = req.body as TaskDeadlineDto;
-    const { priority } = req.body as TaskPriorityDto;
-    const { executionTime } = req.body as TaskExTimeDto;
     const { categoryTitle } = req.body as TaskCategoryTitleDto;
     const { description } = req.body as TaskDescriptionDto;
 
@@ -74,8 +68,6 @@ router.post("/", [auth, upload.none(), validateWith(taskSchema)], async (req: Re
         title: title,
         description: description,
         deadline: deadline,
-        priority: priority,
-        executionTime: executionTime,
         status: 'Not started'
     });
 

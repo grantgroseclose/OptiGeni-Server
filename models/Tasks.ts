@@ -31,22 +31,10 @@ const TaskSchema: Schema = new Schema({
         type: Schema.Types.Date,
         required: true
     },
-    priority: {
-        type: Number,
-        required: true
-    },
-    executionTime: {
-        type: Number,
-        required: true
-    },
     status: {
         type: String,
         enum: ['Not started', 'In-progress', 'Complete'],
         required: true
-    },
-    startDate: {
-        type: Number,
-        required: false
     }
 });
 
