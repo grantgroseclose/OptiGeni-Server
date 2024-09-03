@@ -42,7 +42,7 @@ router.post("/", validateWith(existingUserSchema), async (req: Request, res: Res
       { expiresIn: "24h" }
     );
 
-    res.send(token);
+    res.send({ token: token, firstname: user.firstname });
 });
 
 
