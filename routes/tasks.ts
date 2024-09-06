@@ -16,6 +16,7 @@ import TaskModel from '../models/Tasks';
 import CategoryModel from '../models/Categories';
 import { TaskTitleDto, TaskDeadlineDto, TaskUserIdDto, TaskCategoryTitleDto, TaskDescriptionDto, TaskUIdDto } from '../dtos/task';
 import { Category } from '../types/category';
+import isValidDate from '../utils/isValidDate';
 
 
 
@@ -23,7 +24,7 @@ import { Category } from '../types/category';
 const taskSchema = z.object({
     uId: z.string().min(1),
     title: z.string().min(2, 'Title must have at least 2 characters'),
-    deadline: z.coerce.date(),
+    deadline: z.string().datetime(),
     categoryId: z.string().optional(),
     categoryTitle: z.string(),
     description: z.string(),
@@ -60,6 +61,11 @@ router.post("/", [auth, upload.none(), validateWith(taskSchema)], async (req: Re
         return res.status(404).send({ error: "Category not found" });
     }
 
+    const deadlineDate = new Date(deadline);
+    if (!isValidDate(deadlineDate)) {
+        return res.status(400).send({ error: "Invalid deadline format" });
+    }
+
     const newTask = new TaskModel({
         userId: Types.ObjectId.createFromHexString(userId),
         uId: uId,
@@ -67,7 +73,7 @@ router.post("/", [auth, upload.none(), validateWith(taskSchema)], async (req: Re
         categoryTitle: cat.title,
         title: title,
         description: description,
-        deadline: deadline,
+        deadline: deadlineDate,
         status: 'Not started'
     });
 

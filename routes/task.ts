@@ -21,7 +21,7 @@ import { TaskUserIdDto, TaskUIdDto, TaskStatusDto } from '../dtos/task';
 const taskSchema = z.object({
     uId: z.string().min(1),
     title: z.string().min(2, 'Title must have at least 2 characters'),
-    deadline: z.coerce.date(),
+    deadline: z.string().datetime(),
     categoryId: z.string(),
     categoryTitle: z.string(),
     description: z.string(),

@@ -57,18 +57,6 @@ router.post("/", [auth, upload.none(), validateWith(categorySchema)], async (req
     res.status(201).send(category);
 });
 
-// router.delete("/delete", async (req, res) => {
-//     try {
-//         const cat = await CategoryModel.findOneAndDelete({ uId: req.query.uId });
-//         if (!cat) {
-//             return res.status(404).send();
-//         }
-//         res.send(cat);
-//     } catch (error) {
-//         res.status(500).send(error);
-//     }
-// });
-
 
 
 
